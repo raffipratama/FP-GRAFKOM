@@ -3,8 +3,11 @@ import {
     GLTFLoader
 } from './js/GLTFLoader.js';
 
+
 const clock = new THREE.Clock();
 let mixer;
+let spheres = [];
+let coins = [];
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene();
@@ -62,22 +65,23 @@ let video01 = document.getElementById('video01');
 video01.playbackRate = 5;
 video01.play();
 let videoTexture01 = new THREE.VideoTexture(video01);
-
-const loader4 = new THREE.TextureLoader();
-const road = loader4.load('road.gif');
 let roadPlane = new THREE.BoxGeometry(40, 100);
 let roadMaterial = new THREE.MeshLambertMaterial({
     map: videoTexture01
 });
+// const material = new THREE.MeshBasicMaterial({
+//     map: texture,
+//     transparent: true
+// });
 
 let plane = new THREE.Mesh(roadPlane, roadMaterial);
-plane.rotation.x = THREE.Math.degToRad(90);
+plane.rotation.x = THREE.Math.degToRad(270);
 plane.receiveShadow = true;
 scene.add(plane);
 
 
 // Model
-let model
+var model
 const loader = new GLTFLoader();
 loader.load(
     'scene.gltf',
@@ -127,7 +131,7 @@ function onDocumentKeyDown(event) {
                     allowDown = false;
                 }
             }
-            console.log(`${model.position.y}, ${speedY}`);
+            // console.log(`${model.position.y}, ${speedY}`);
         });
     }
     //left
@@ -144,6 +148,7 @@ function onDocumentKeyDown(event) {
             }
         });
     }
+
     // right 
     if (keyCode == 39 && model.position.x != 15 && model.position.y == 0) {
         renderer.setAnimationLoop(() => {
@@ -160,6 +165,29 @@ function onDocumentKeyDown(event) {
     }
 };
 
+var arr = ["-15", "0", "15"];
+var sphere;
+//sphere
+
+setInterval(function () {
+
+    const texture = new THREE.TextureLoader().load('16079.jpg');
+    const material = new THREE.MeshBasicMaterial({ map: texture });
+    sphere = new THREE.Mesh(new THREE.SphereGeometry(4, 20, 20), material);
+    sphere.name = sphere;
+    scene.add(sphere);
+    sphere.position.z = -20;
+    sphere.position.y = 5;
+    sphere.position.x = arr[Math.floor(Math.random() * arr.length)];
+    sphere.castShadow = true;
+
+    spheres.push(sphere)
+
+    setTimeout(function () {
+        sphere.remove(sphere);
+    }, 2000);
+}, 1000);
+
 // Lights
 const Light = new THREE.AmbientLight(0xffffff);
 Light.position.set(0, 10, 30);
@@ -169,12 +197,28 @@ scene.add(Light);
 // Fog
 scene.fog = new THREE.Fog('black', 60, 100);
 
+function collisions() {
+
+}
+
+
 // Animation
 function animate() {
     renderer.render(scene, camera);
     window.requestAnimationFrame(animate);
     var delta = clock.getDelta();
     if (mixer) mixer.update(delta);
+    spheres.forEach((sphere) => {
+        sphere.rotation.x += THREE.Math.degToRad(10);
+        sphere.position.z += 2
+    });
+    let mpos = model.position;
+    let spos = sphere.position;
+    // console.log (spos);
+    if ((mpos.x - spos.x <= 4 && mpos.x - spos.x >= -4) && (mpos.z - spos.z <= 4 && mpos.z - spos.z >= -4) && (mpos.y - spos.y <= 3 && mpos.y - spos.y >= -5)) {
+        alert('coba nabrak' + 'lokasim' + mpos.y + 'lokasis' + spos.y);
+    }
+    //     coins.forEach((coin) => coin.position.z += 2);
 
 }
 animate();
