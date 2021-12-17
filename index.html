@@ -22,6 +22,12 @@
             left: 0;
             outline: none;
         }
+        #skor {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            color: white;
+        }
     </style>
 </head>
 
@@ -29,6 +35,9 @@
     <canvas class="webgl">
         <script src="script.js" type="module"></script>
     </canvas>
+    <h1 id="skor">
+        0
+    </h1>
     <video muted loop class="vid1" id="video01">
         <source src="road.mp4" type="video/mp4" />
       </video>

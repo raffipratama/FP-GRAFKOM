@@ -4,6 +4,7 @@ import {
 } from './js/GLTFLoader.js';
 
 
+var skor = 0;
 const clock = new THREE.Clock();
 let mixer;
 let spheres = [];
@@ -204,6 +205,17 @@ function onDocumentKeyDown(event) {
     }
 };
 
+// Lights
+const Light = new THREE.AmbientLight(0xffffff);
+Light.position.set(0, 10, 30);
+Light.intensity = 0.5;
+scene.add(Light);
+
+// Fog
+scene.fog = new THREE.Fog('black', 60, 100);
+
+
+
 var arr = ["-15", "0", "15"];
 var sphere;
 //sphere
@@ -223,22 +235,11 @@ setInterval(function () {
     spheres.push(sphere)
 
     setTimeout(function () {
-        sphere.remove(sphere);
+        // sphere.remove(sphere);
     }, 2000);
-}, 1000);
+}, 2000);
 
-// Lights
-const Light = new THREE.AmbientLight(0xffffff);
-Light.position.set(0, 10, 30);
-Light.intensity = 0.5;
-scene.add(Light);
-
-// Fog
-scene.fog = new THREE.Fog('black', 60, 100);
-
-function collisions() {
-
-}
+var started=0;
 
 // Animation
 function animate() {
@@ -246,6 +247,12 @@ function animate() {
     window.requestAnimationFrame(animate);
     var delta = clock.getDelta();
     if (mixer) mixer.update(delta);
+
+    if (!started){
+        alert('click to start');
+        started ++;
+    }
+
     spheres.forEach((sphere) => {
         sphere.rotation.x += THREE.Math.degToRad(10);
         sphere.position.z += 2
@@ -254,9 +261,18 @@ function animate() {
     let spos = sphere.position;
     // console.log (spos);
     if (((mpos.x - spos.x) <= 4 && (mpos.x - spos.x) >= -4) && ((mpos.z - spos.z) <= 4 && (mpos.z - spos.z) >= -4) && ((mpos.y - spos.y) <= 3 && (mpos.y - spos.y) >= -5)) {
-        alert('coba nabrak' + ' lokasiym ' + mpos.y + ' lokasiys ' + spos.y + ' lokasixm ' + mpos.x + ' lokasixs ' + spos.x + ' lokasizm ' + mpos.z + ' lokasizs ' + spos.z);
+        alert('Game Over!!\nYour Score :'+skor);
+        location.reload();
+    }
+    else if (mpos.z == spos.z)
+    {
+        skor++;
+        document.getElementById("skor").innerHTML = skor;
+        console.log('skor nambah');
     }
     //     coins.forEach((coin) => coin.position.z += 2);
 
 }
 animate();
+
+
