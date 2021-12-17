@@ -230,7 +230,7 @@ setInterval(function () {
     spheres.push(sphere);
 }, 2000);
 
-var started=0, finished=0;
+var started=0, finished=0, person;
 
 // Animation
 function animate() {
@@ -240,7 +240,7 @@ function animate() {
     if (mixer) mixer.update(delta);
 
     if (!started){
-        alert('Click To Start');
+        person = prompt("Please enter your name");
         started ++;
     }
 
@@ -255,7 +255,7 @@ function animate() {
     let spos = sphere.position;
     
     if (((mpos.x - spos.x) <= 4 && (mpos.x - spos.x) >= -4) && ((mpos.z - spos.z) <= 4 && (mpos.z - spos.z) >= -4) && ((mpos.y - spos.y) <= 3 && (mpos.y - spos.y) >= -5) && !finished) {
-        alert('Game Over!!\nYour Score : '+skor);
+        alert('Game Over!!\n'+person+' Score : '+skor);
         finished++;
         location.reload();
     }
