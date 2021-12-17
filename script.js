@@ -60,6 +60,18 @@ const textureSun = panorama.load([
 ]);
 scene.background = textureSun;
 
+//audio
+const listener = new THREE.AudioListener();
+camera.add( listener );
+const sound = new THREE.Audio( listener );
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load( 'audio.mp3', function( buffer ) {
+	sound.setBuffer( buffer );
+	sound.setLoop( true );
+	sound.setVolume( 0.5 );
+	sound.play();
+});
+
 // Road
 let video01 = document.getElementById('video01');
 video01.playbackRate = 5;
@@ -98,6 +110,30 @@ loader.load(
     }
 );
 
+//jump audio
+const listener2 = new THREE.AudioListener();
+camera.add( listener2 );
+const sound2 = new THREE.Audio( listener2 );
+const audioLoader2 = new THREE.AudioLoader();
+audioLoader.load( 'Jump Sound Effect.mp3', function( buffer ) {
+	sound2.setBuffer( buffer );
+	sound2.setLoop( false );
+	sound2.setVolume( 0.5 );
+});
+
+//slide audio
+const listener3 = new THREE.AudioListener();
+camera.add( listener3 );
+const sound3 = new THREE.Audio( listener3 );
+const audioLoader3 = new THREE.AudioLoader();
+audioLoader.load( 'Slide Sound Effect.mp3', function( buffer ) {
+	sound3.setBuffer( buffer );
+	sound3.setLoop( false );
+	sound3.setVolume( 0.5 );
+});
+
+
+
 document.addEventListener("keydown", onDocumentKeyDown, false);
 let speedX = 1.6;
 let gravity = 0.4;
@@ -110,6 +146,7 @@ function onDocumentKeyDown(event) {
         var speedY = 3;
         let allowUp = true;
         let allowDown = true;
+        sound2.play();
         console.log('masuk up/space');
         renderer.setAnimationLoop(() => {
             if (speedY > 0 && allowUp) {
@@ -136,6 +173,7 @@ function onDocumentKeyDown(event) {
     }
     //left
     if (keyCode == 37 && model.position.x != -15 && model.position.y == 0) {
+        sound3.play();
         renderer.setAnimationLoop(() => {
             if (posx <= 0) {
                 if (model.position.x > -14)
@@ -151,6 +189,7 @@ function onDocumentKeyDown(event) {
 
     // right 
     if (keyCode == 39 && model.position.x != 15 && model.position.y == 0) {
+        sound3.play();
         renderer.setAnimationLoop(() => {
             if (posx >= 0) {
                 if (model.position.x < 14)
@@ -201,7 +240,6 @@ function collisions() {
 
 }
 
-
 // Animation
 function animate() {
     renderer.render(scene, camera);
@@ -215,8 +253,8 @@ function animate() {
     let mpos = model.position;
     let spos = sphere.position;
     // console.log (spos);
-    if ((mpos.x - spos.x <= 4 && mpos.x - spos.x >= -4) && (mpos.z - spos.z <= 4 && mpos.z - spos.z >= -4) && (mpos.y - spos.y <= 3 && mpos.y - spos.y >= -5)) {
-        alert('coba nabrak' + 'lokasim' + mpos.y + 'lokasis' + spos.y);
+    if (((mpos.x - spos.x) <= 4 && (mpos.x - spos.x) >= -4) && ((mpos.z - spos.z) <= 4 && (mpos.z - spos.z) >= -4) && ((mpos.y - spos.y) <= 3 && (mpos.y - spos.y) >= -5)) {
+        alert('coba nabrak' + ' lokasiym ' + mpos.y + ' lokasiys ' + spos.y + ' lokasixm ' + mpos.x + ' lokasixs ' + spos.x + ' lokasizm ' + mpos.z + ' lokasizs ' + spos.z);
     }
     //     coins.forEach((coin) => coin.position.z += 2);
 
