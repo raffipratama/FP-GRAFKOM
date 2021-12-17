@@ -3,7 +3,7 @@
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 
 <head>
-    <title>Task 4 Aflah Hilmy</title>
+    <title>Final Project Grafkom B14</title>
     <style>
         * {
             margin: 0;
@@ -21,6 +21,9 @@
             top: 0;
             left: 0;
             outline: none;
+            background-color:white;
+            width: 100vw;
+            height: 100vh;
         }
         #skor {
             position: fixed;
@@ -28,19 +31,21 @@
             left: 50%;
             color: white;
         }
+        #video01 {
+            position: fixed ;
+            top: 0;
+        }
     </style>
 </head>
 
 <body>
+    <video muted loop class="vid1" id="video01">
+        <source src="road.mp4" type="video/mp4" />
+    </video>  
     <canvas class="webgl">
         <script src="script.js" type="module"></script>
     </canvas>
-    <h1 id="skor">
-        0
-    </h1>
-    <video muted loop class="vid1" id="video01">
-        <source src="road.mp4" type="video/mp4" />
-      </video>
+    <h1 id="skor">0</h1>
 </body>
 
 </html>

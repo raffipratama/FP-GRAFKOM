@@ -8,7 +8,6 @@ var skor = 0;
 const clock = new THREE.Clock();
 let mixer;
 let spheres = [];
-let coins = [];
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene();
@@ -82,10 +81,6 @@ let roadPlane = new THREE.BoxGeometry(40, 100);
 let roadMaterial = new THREE.MeshLambertMaterial({
     map: videoTexture01
 });
-// const material = new THREE.MeshBasicMaterial({
-//     map: texture,
-//     transparent: true
-// });
 
 let plane = new THREE.Mesh(roadPlane, roadMaterial);
 plane.rotation.x = THREE.Math.degToRad(270);
@@ -115,7 +110,7 @@ loader.load(
 const listener2 = new THREE.AudioListener();
 camera.add( listener2 );
 const sound2 = new THREE.Audio( listener2 );
-const audioLoader2 = new THREE.AudioLoader();
+// const audioLoader2 = new THREE.AudioLoader();
 audioLoader.load( 'Jump Sound Effect.mp3', function( buffer ) {
 	sound2.setBuffer( buffer );
 	sound2.setLoop( false );
@@ -126,7 +121,7 @@ audioLoader.load( 'Jump Sound Effect.mp3', function( buffer ) {
 const listener3 = new THREE.AudioListener();
 camera.add( listener3 );
 const sound3 = new THREE.Audio( listener3 );
-const audioLoader3 = new THREE.AudioLoader();
+// const audioLoader3 = new THREE.AudioLoader();
 audioLoader.load( 'Slide Sound Effect.mp3', function( buffer ) {
 	sound3.setBuffer( buffer );
 	sound3.setLoop( false );
@@ -148,9 +143,9 @@ function onDocumentKeyDown(event) {
         let allowUp = true;
         let allowDown = true;
         sound2.play();
-        console.log('masuk up/space');
+        // console.log('masuk up/space');
         renderer.setAnimationLoop(() => {
-            if (speedY > 0 && allowUp) {
+            if (speedY > 0 && allowUp && posy==0) {
                 model.position.y += speedY
                 speedY -= gravity;
                 if (speedY <= 0) {
@@ -232,14 +227,10 @@ setInterval(function () {
     sphere.position.x = arr[Math.floor(Math.random() * arr.length)];
     sphere.castShadow = true;
 
-    spheres.push(sphere)
-
-    setTimeout(function () {
-        // sphere.remove(sphere);
-    }, 2000);
+    spheres.push(sphere);
 }, 2000);
 
-var started=0;
+var started=0, finished=0;
 
 // Animation
 function animate() {
@@ -249,28 +240,30 @@ function animate() {
     if (mixer) mixer.update(delta);
 
     if (!started){
-        alert('click to start');
+        alert('Click To Start');
         started ++;
     }
 
     spheres.forEach((sphere) => {
         sphere.rotation.x += THREE.Math.degToRad(10);
-        sphere.position.z += 2
+        sphere.position.z += 2;
+        setTimeout(function () {
+            scene.remove(sphere);
+        }, 2000);
     });
     let mpos = model.position;
     let spos = sphere.position;
-    // console.log (spos);
-    if (((mpos.x - spos.x) <= 4 && (mpos.x - spos.x) >= -4) && ((mpos.z - spos.z) <= 4 && (mpos.z - spos.z) >= -4) && ((mpos.y - spos.y) <= 3 && (mpos.y - spos.y) >= -5)) {
-        alert('Game Over!!\nYour Score :'+skor);
+    
+    if (((mpos.x - spos.x) <= 4 && (mpos.x - spos.x) >= -4) && ((mpos.z - spos.z) <= 4 && (mpos.z - spos.z) >= -4) && ((mpos.y - spos.y) <= 3 && (mpos.y - spos.y) >= -5) && !finished) {
+        alert('Game Over!!\nYour Score : '+skor);
+        finished++;
         location.reload();
     }
     else if (mpos.z == spos.z)
     {
         skor++;
         document.getElementById("skor").innerHTML = skor;
-        console.log('skor nambah');
     }
-    //     coins.forEach((coin) => coin.position.z += 2);
 
 }
 animate();
